@@ -9,8 +9,9 @@
 ### Bronco 马踢
 - 降阶: 跳跃波比
   
-图示:
+::: details 马踢+跳跃图示
 ![bronco](/images/bronco.png)
+:::
 
 ### Donkey Kick 驴踢
 - 降阶: 蛙跳
