@@ -1,34 +1,21 @@
-# Grit Cardio 23
+# Grit Cardio 23 <Badge type="tip" text="⭐️" vertical="top" />
+
+[🎬 Resource](https://b23.tv/wzUF8dW)
 
 [[toc]]
 
 ## 01. WARMUP
 
 - Jog OTS - 15s 
-  - 原地慢跑
 - Jog OTS, Heels Up - 15s 
-  - 原地(抬脚跟)慢跑
 - High Knee Jog - 15s
-  - 高抬腿慢跑
 - High Knee Run - 20s
-  - 高抬腿跑
 - Squat Burpee - 30s
-  - 深蹲波比(降阶: 双脚迈入迈出)
 - Bronco - 25s
-  - 马踢(降阶: 跳跃波比)
 - Bronco (x1), Block Jump (x1) - 15s
-  - 马踢+跳跃
 - Lateral Leap (L+R) - 25s
-  - 横向跳
 - Squat Air Tap - 15s
-  - 深蹲单手触地后跳跃(降阶: 不触地)
 - Recovery 
-
-#### 马踢+跳跃图示:
-
-![bronco](/images/bronco.png)
-
-
 ## 02. MONSTER SETS
 
 - STATION 1
@@ -49,9 +36,7 @@
 - 60s
   - Squat Burpee
   - Donkey Kick (x1) 
-    - 驴踢(降阶: Frog Jump 蛙跳)
   - Tuck Jump (x1) 
-    - 团身跳(降阶: Squat Jump 深蹲跳)
 - Recovery
 
 ::: tip
@@ -62,9 +47,7 @@
 
 - Spider Crawl
   - Pushup + Knees in + 180° turn 
-    - (俯卧撑 + 收膝 + 旋转 180° )
 - Squat Jump, Side Step (L+R)   
-  - (深蹲跳 + 侧向左右跨步)
 - Recovery
 
 ::: tip
@@ -98,7 +81,7 @@
 - Tuck Jump (x1)
 
 ::: tip
-8轮动作, 30秒训练, 15秒休息. 3,5,7重复SET1, 4,6,8重复SET2. 
+8轮动作, 30秒训练, 15秒休息. SET1 SET2 轮换重复.
 ::: 
 
 ## 07. 1 MINUTE CHALLENGE

@@ -5,7 +5,7 @@ export default defineUserConfig<DefaultThemeOptions>({
   base: "/grit/",
   lang: "en-US",
   title: "Grit",
-  description: "Grit Workout Notes",
+  description: "Workout",
   // theme and its config
   theme: "@vuepress/theme-default",
   themeConfig: {
@@ -18,8 +18,16 @@ export default defineUserConfig<DefaultThemeOptions>({
     ],
     sidebar: [
       {
-        text: "Grit Cardio 23",
-        link: "/grit-23/cardio.md"
+        text: "🗒 Choreography",
+        children: [{ text: "🌟 Grit Cardio 23", link: "/grit-23/cardio.md" }]
+      },
+      {
+        text: "📝 Terms",
+        link: "/terms/index.md"
+      },
+      {
+        text: "🐟's Workout Tracker",
+        link: "/my/workout.md"
       }
     ]
   },
