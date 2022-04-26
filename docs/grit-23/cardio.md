@@ -1,4 +1,4 @@
-# Grit Cardio 23 <Badge type="tip" text="⭐️" vertical="top" />
+# Grit Cardio 23
 
 [🎬 Resource](https://b23.tv/wzUF8dW)
 
@@ -6,37 +6,32 @@
 
 ## 01. WARMUP
 
-- Jog OTS - 15s 
-- Jog OTS, Heels Up - 15s 
-- High Knee Jog - 15s
-- High Knee Run - 20s
-- Squat Burpee - 30s
-- Bronco - 25s
-- Bronco (x1), Block Jump (x1) - 15s
-- Lateral Leap (L+R) - 25s
-- Squat Air Tap - 15s
+- Jog OTS <Badge type="tip" text="15s" vertical="baseline" />
+- Jog OTS, Heels Up <Badge type="tip" text="15s" vertical="baseline" />
+- High Knee Jog <Badge type="tip" text="15s" vertical="baseline" />
+- High Knee Run <Badge type="tip" text="20s" vertical="baseline" />
+- Squat Burpee <Badge type="tip" text="30s" vertical="baseline" />
+- Bronco <Badge type="tip" text="25s" vertical="baseline" />
+- Bronco (x1), Block Jump (x1) <Badge type="tip" text="15s" vertical="baseline" />
+- Lateral Leap (L+R) <Badge type="tip" text="25s" vertical="baseline" />
+- Air Tap with Floor Tap <Badge type="tip" text="15s" vertical="baseline" />
 - Recovery 
 ## 02. MONSTER SETS
 
-- STATION 1
-  - Bronco (x1), Block Jump (x1) 
-- STATION 2
-  - Squat Air Tap
-- STATION 3
-  - Lateral Leap (L+R)
-- STATION 4
-  - High Knee Run
+1. Bronco (x1), Block Jump (x1) 
+0. Air Tap with Floor Tap
+0. Lateral Leap (L+R)
+0. High Knee Run
 
 ::: tip
-每个动作 30 秒, 5秒之后转换动作. 重复三轮.
+每个动作30秒, 5秒之后转换动作. 重复三轮.
 ::: 
 
 ## 03. 1 MINUTE CHALLENGE
 
-- 60s
-  - Squat Burpee
-  - Donkey Kick (x1) 
-  - Tuck Jump (x1) 
+- Squat Burpee
+- Donkey Kick (x1) 
+- Tuck Jump (x1) 
 - Recovery
 
 ::: tip
@@ -45,8 +40,7 @@
 
 ## 04. DESCENDING SUPERSETS
 
-- Spider Crawl
-  - Pushup + Knees in + 180° turn 
+- Bear 180° Pushup (Spider Crawl)
 - Squat Jump, Side Step (L+R)   
 - Recovery
 
@@ -56,10 +50,9 @@
 
 ## 05. 1 MINUTE CHALLENGE
 
-- 60s
-  - Squat Burpee
-  - Donkey Kick (x1) 
-  - Tuck Jump (x1) 
+- Squat Burpee
+- Donkey Kick (x1) 
+- Tuck Jump (x1) 
 - Recovery
 
 ::: tip
@@ -86,10 +79,9 @@
 
 ## 07. 1 MINUTE CHALLENGE
 
-- 60s
-  - Squat Burpee
-  - Donkey Kick (x1) 
-  - Tuck Jump (x1) 
+- Squat Burpee
+- Donkey Kick (x1) 
+- Tuck Jump (x1) 
 - Recovery
 
 ::: tip
@@ -98,11 +90,11 @@
 
 ## 08. CORE CHALLENGE
 
-- Alternating Leg Extension (L+R)
-- Oblique Alternating Leg Extension (x8) (L+R)
-- Cross Crawl (L+R)
-- Cross Crawl (straight legs) (L+R)
-- Alternating Leg Extension (L+R)
-- Oblique Alternating Leg Extension (x8) (L+R)
-- Cross Crawl (bent or straight legs) (L+R) 
+- Alternating Leg Extension (L+R) <Badge type="tip" text="10s" vertical="baseline" />
+- Oblique Alternating Leg Extension (x8) (L+R) <Badge type="tip" text="15s" vertical="baseline" />
+- Cross Crawl (L+R) <Badge type="tip" text="10s" vertical="baseline" />
+- Cross Crawl (straight legs) (L+R) <Badge type="tip" text="15s" vertical="baseline" />
+- Alternating Leg Extension (L+R) <Badge type="tip" text="10s" vertical="baseline" />
+- Oblique Alternating Leg Extension (x8) (L+R) <Badge type="tip" text="30s" vertical="baseline" />
+- Cross Crawl (bent or straight legs) (L+R) <Badge type="tip" text="10s" vertical="baseline" />
 - Recovery
