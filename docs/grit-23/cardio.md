@@ -4,7 +4,7 @@
 
 [[toc]]
 
-## 01. WARMUP
+## 01. WARM-UP
 
 - Jog OTS <Badge type="tip" text="15s" vertical="baseline" />
 - Jog OTS, Heels Up <Badge type="tip" text="15s" vertical="baseline" />
