@@ -19,7 +19,10 @@ export default defineUserConfig<DefaultThemeOptions>({
     sidebar: [
       {
         text: "🗒 Choreography",
-        children: [{ text: "🌟 Grit Cardio 23", link: "/grit-23/cardio.md" }]
+        children: [
+          { text: "🌟 Grit Cardio 23", link: "/grit-23/cardio.md" },
+          { text: "🌟 Grit Cardio 39", link: "/grit-39/cardio.md" }
+        ]
       },
       {
         text: "📝 Terms",
