@@ -14,8 +14,6 @@
 - Abs braced
 - Knees up to waist height
 
-
-
 ### Dynamic Lunge with Rotation
 
 - Long step back
@@ -26,6 +24,18 @@
 
 ## Squat
 
+### Pop Squat
+
+- Jump feet just outside hip-width
+- Hips back and down
+- Knees out over toes
+- Butt to 90 degrees
+- Chest up
+- Jump feet back in, one foot crosses over the other
+- Chest faces forward
+- Hips rotate with the direction of front foot
+- Core activated
+- Soft knees to jump in and out of Squat
 ### Drop Squat
 
 - Feet start together, jump into Drop Squat then back to centre
@@ -80,6 +90,15 @@
 
 ### Block Jump
 
+### Broad Jump
+
+- Athletic stance to begin
+- Feet just outside hip-width, knees soft
+- Bend knees and hips to take off
+- Both feet take off, both feet land
+- Soft knee landing
+- Brace core to take off and land
+- Keep chest up
 ### [Air Jack](https://www.exercise.com/exercises/air-jack/)
 
 - Start with feet hip-width apart in a narrow Squat
@@ -128,6 +147,16 @@ floor (alternate L+R)
 - Chest up - abs braced
 - **OPTION:** Backward-stepping Lunge
   - 退阶: 后撤弓箭步
+
+### Power Lunge
+
+- Big step back
+- Bend knees – front thigh parallel to floor
+- Jump and switch legs
+- Swing arms over head
+- Soft knee landing in the Lunge
+- Chest lifted, abs braced
+- **OPTION:** Backward-stepping Lunge
 
 ### Tuck Jump Lunge
 
@@ -277,6 +306,16 @@ Add a Jump
 - Soft knee landing
 - **OPTION:** No Jump
     - 退阶: 不跳跃
+
+### Double V-Tap
+
+- Essentially a Burpee with a Double Foot Tap
+- Squat, jump feet back to Plank position, jump back to Squat, jump up and tap on foot, land, jump up and tap the other foot
+- Both feet take off, both feet and land
+- Use Squat to absorb landing
+- Chest up on the Foot Tap
+- Strong core brace
+- **OPTION:** Burpee Double Heel Tap
 
 ## Lateral
 ### Lateral Leap 横向跳
@@ -429,3 +468,32 @@ braced
   - 退阶: 脚触地
 - **OPTION:** Straight Legs
   - 进阶: 直腿
+
+### Kick Sit
+
+- Begin in Bear Crawl position, hands in line with shoulders, knees in line with hips
+- Rotate to the side, kicking bottom leg through straight and lifting opposite arm off the floor – swing straight leg back into Bear and rotate to the other side
+- Chest up, core activated
+- Back knee faces ceiling
+- Press palm hard into floor of grounded hand
+- Butt hovers off the floor
+- **OPTION:** Switch Climber
+
+### Switch Climber
+
+- Offer this as an alternative to the Kick Sit if technique and speed are compromised
+- Begin in Plank position
+- Back long and straight
+- Hands in line with shoulders
+- Hip square to the floor
+- Core activated
+- Jumping one foot up beside the hand and jumping to switch other leg
+- Hips down
+
+### Cross-Climber
+
+- Hands under shoulders in Plank position
+- Back long and straight
+- Abs braced
+- Pull knee towards opposite elbow then step back to Plank
+- Alternate knees
