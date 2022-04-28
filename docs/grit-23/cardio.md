@@ -1,6 +1,6 @@
 # Grit Cardio 23
 
-[🎬 Resource](https://b23.tv/wzUF8dW)
+[🎬 Resource](https://www.bilibili.com/video/BV1qR4y1N7NB?p=1)
 
 [[toc]]
 
