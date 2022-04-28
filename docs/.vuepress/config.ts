@@ -20,6 +20,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       {
         text: "🗒 Choreography",
         children: [
+          { text: "✅ Grit Cardio 22", link: "/grit-22/cardio.md" },
           { text: "🌟 Grit Cardio 23", link: "/grit-23/cardio.md" },
           { text: "🌟 Grit Cardio 39", link: "/grit-39/cardio.md" }
         ]

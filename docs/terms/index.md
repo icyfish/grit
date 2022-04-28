@@ -12,11 +12,31 @@
 ### High Knee Run
 - Chest up
 - Abs braced
+- Knees up to waist height
 
+
+
+### Dynamic Lunge with Rotation
+
+- Long step back
+- Bend knee to 90 degrees
+- Front thigh parallel to floor
+- Front knee out
+- Rotate towards front thigh
+
+## Squat
+
+### Drop Squat
+
+- Feet start together, jump into Drop Squat then back to centre
+- Hands touch down towards floor with chest up in Squat
+- Feet wide – knees out over toes in Squat
+- Butt to knee-level in Squat
+- **OPTION:** No Touch Down
 ### Squat with Arm Reach over Head
 
 - Feet just outside hip-width
-  - 双脚略宽于髋宽
+  - 双脚站宽略宽于髋宽
 - Hips back and down
   - 臀部向后向下
 - Knees out over toes
@@ -27,16 +47,6 @@
   - 手臂伸直 - 手肘靠近脸部前侧
 - Armpits and pinky fingers face front
 - Abs braced
-
-### Dynamic Lunge with Rotation
-
-- Long step back
-- Bend knee to 90 degrees
-- Front thigh parallel to floor
-- Front knee out
-- Rotate towards front thigh
-  
-
 ## Jump
 ### Tuck Jump 团身跳
 - Chest up
@@ -46,9 +56,29 @@
 - **OPTION:** Squat Jump
   - 退阶: 深蹲跳
 
-### Squat Jump 深蹲跳
-### Block Jump
+### Butt Kick, Wide Squat
 
+- Start with feet together
+- Jump up, kick heels towards butt
+- Land in Wide Squat
+- Chest up
+- Use Squat to absorb landing
+- Abs braced
+- **OPTION:** Squat Jump
+  - 退阶: 深蹲跳
+
+### Squat Jump 深蹲跳
+
+### Plyo Sumo Squat Jump 增强式相扑深蹲跳
+
+- Start feet together
+- Jump up, then land in Wide Squat
+- Chest up
+- Use Squat to absorb landing
+- Abs braced
+- **OPTION:** Squat Jack
+
+### Block Jump
 
 ### [Air Jack](https://www.exercise.com/exercises/air-jack/)
 
@@ -65,6 +95,13 @@ the Jump
 
 ### Jumping Jack
 
+### Speed Squat Jack
+
+- Stay low in the legs with hands above head, jump feet out and in
+- Chest up
+- Abs braced
+- Knees out in Jump
+- Heels down in Jack
 ### Air Tap With Floor Tap 深蹲单手触地后跳跃
 
 - Feet wide, outside hip-width
@@ -92,7 +129,23 @@ floor (alternate L+R)
 - **OPTION:** Backward-stepping Lunge
   - 退阶: 后撤弓箭步
 
+### Tuck Jump Lunge
 
+- Jump Lunge (alternating L+R) with Tuck Jump to switch
+- Use Lunge to absorb landing
+- Chest up
+- Abs braced
+- Drive out of front heel
+- Back knee down
+- **OPTION:** Straight Jump instead of Tuck Jump
+
+### Snowboarder
+
+- Rotate 180 degrees in turning Squat Jump (L+R)
+- Feet wide
+- Knees soft
+- Use Squat to absorb landing
+- Abs braced to turn
 ## Climb
 
 ### Mountain Climber 登山跑
@@ -108,8 +161,28 @@ floor (alternate L+R)
 - **OPTION:** Walk Knees in and out
   - 退阶: 双膝慢速交替推至胸口位
 
+### Jumping Switch Climber
 
+- Start in Plank position, hands under shoulders
+- Back long, strong and straight
+- Abs braced
+- One knee bends in towards chest as other leg
+extends straight back in the air
+- Two feet take off and two feet land
+- Hips and shoulders square to ground
 
+![jumping_switch_climber](/images/jumping_switch_climber.png)
+
+### Chimp Walk
+
+- Hands and feet on floor
+- Both hands extend forward on floor, then both feet jump forward
+- Feet wide
+- Hips lifted
+- Back long, strong and straight
+- Knees to 90 degrees
+  
+![chimp_walk](/images/chimp_walk.png)
 ## Kick
 ### Bronco, Block Jump 马踢
 - Start in low Squat position, feet outside hip-width
@@ -146,9 +219,19 @@ Plank position
 - **OPTION:** Frog Jump
   - 退阶: 蛙跳	
 
-### Frog Jump 蛙跳
+### Single-leg Frog Jump
+
+- Start in Plank position, hands under shoulders
+- Back long, strong and straight
+- Abs braced
+- Both feet take off, one foot lands with knees
+in line with hips (alternate L+R)
+- Knee jumps forward to 90 degrees
+- Hips and shoulders square to ground
+
+
 ## Burpee
-### Squat Burpee 深蹲波比
+### Squat Burpee Jump 深蹲波比
 - Squat, jump back into Plank position, jump forward into Wide Squat 
   - 深蹲向后跳至平板位, 向前跳跃起身至宽距蹲位.
 - Feet outside hip-width 
@@ -167,6 +250,18 @@ Plank position
   - 腰背挺直
 - **OPTION:** Walk feet out and in 
     - 退阶: 双脚迈入迈出
+
+### Squat Burpee Jump with Clap Overhead
+
+- Squat, jump back into Plank position, jump forward into Wide Squat, Jump and clap hands overhead
+- Feet outside hip-width
+- Butt down and back, just above knee-height in Squat
+- Use Squat to transition
+- Chest up
+- Abs braced as feet jump back
+- Hands under shoulders
+- Back long, strong and straight in Plank position
+- **OPTION:** Walk feet out and in, No Jump
 
 ### Half Burpee
 
@@ -192,13 +287,22 @@ Add a Jump
 - Chest up
 - Abs braced
 
-### Lateral Shuffle
+### Lateral Shuffle 侧向小跑
 
 - Feet Wide
 - Double shuffle then tap the floor with outside hand
+  - 左右滑动并用外侧手拍击地板
 - Chest lifted
 - Knees soft
 - Hips and shoulders stay square to the front
+
+### Shuffle Tap [with Leg Back]
+
+- Two Lateral Shuffles, outside hand taps floor [as inside leg steps back] (L+R)
+- Chest up in the Tap
+- Push hips back in the Tap
+- Abs braced
+- **OPTION:** Shuffle with No Tap
 
 ### Lateral Skater
 
@@ -246,9 +350,45 @@ braced
 
 ![bear180pushup](/images/bear180pushup.png)
 
+### Bear Crawl to Double Jack Pushup
+
+- Start on toes and hands – knees in line with hips, shoulders in line with hands
+- Knees slightly off floor
+- Jack hands and feet at the bottom of the Pushup
+- Abs braced
+- Chest to elbow-height in Pushup
+- Back long, strong and straight
+- **OPTION:** Jack Hands Only
+
+### Pushup, Half Squat, Speed Squat Jack
+
+- Pushup, jump feet forward into Half Squat, Speed Squat Jack
+- Chest to elbow height in Pushup
+- Feet outside shoulder-width in Half Squat
+- Chest up – abs braced on transition
+- Knees out in line with toes in Jack
+- **OPTION:** Pushup on Knees
+
 
 ## Core
 
+### Pike with Alternating Knee Bend
+
+- Keep lower back towards floor
+- Head down
+- Legs extend to 45 degrees
+- Alternating knee towards body
+- Alternating knee in line with hips
+- **OPTION:** Legs Higher than 45 degrees
+
+![pike_alternating_knee_bend](/images/pike_alternating_knee_bend.png) 
+
+### Oblique Crunch
+
+- Legs at 45 degrees
+- Crunch shoulder to opposite knee (alternate L+R)
+- Chin tucked
+- **OPTION:** Tap Foot Down
 ### Oblique Alternating Leg Extension
 
 - Keep lower back and waist towards floor by bracing the abs
@@ -265,6 +405,14 @@ braced
 
 ![oblique_alternating](/images/oblique_alternating.png)
 
+### Walking Hover
+
+- Elbows under shoulders
+- Back long, strong and straight
+- Abs braced
+- Walk feet out, out, in, in
+- Hips and shoulders stay square to floor as feet walk
+- **OPTION:** Hover on Knees
 ### Cross Crawl 交叉爬行
 
 - Fingertips to temples – elbows wide

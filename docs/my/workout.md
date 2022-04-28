@@ -2,6 +2,10 @@
 
 ::: details April, 2022 <Badge type="tip" text="Grit Cardio" vertical="baseline" />
 
+- <Badge type="tip" text="220428" vertical="baseline" />
+  
+  - [Grit Cardio 22](../grit-22/cardio.md) (143)
+
 - <Badge type="tip" text="220425" vertical="baseline" />
   
   - [🌟 Grit Cardio 23](../grit-23/cardio.md) (140)
