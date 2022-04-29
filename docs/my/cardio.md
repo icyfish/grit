@@ -1,0 +1,44 @@
+## 🐟's Cardio Tracker
+
+::: details Grit Cardio
+- [🌟 Grit Cardio feat. Nina Dobrev ](https://www.bilibili.com/video/BV1kM4y1A7dx)
+  - 220407 (150)
+- [🌟 Grit Cardio 39]((../grit-39/cardio.md) )
+  - 220411 (139)
+  - 220421 (144)
+- Grit Cardio 38
+  - 220406 (141)
+- Grit Cardio 37
+  - 220409 (138)
+- Grit Cardio 36
+- Grit Cardio 35
+  - 220414 (140)
+- Grit Cardio 34
+  - 220415 (136)
+- Grit Cardio 33
+  - 220415 (139)
+- Grit Cardio 32
+  - 220416 (134)
+- Grit Cardio 31
+  - 220417 (143)
+- Grit Cardio 30
+  - 220419 (139)
+- Grit Cardio 29
+  - 220420 (134)
+- Grit Cardio 28
+  - 220420 (133)
+- 🌟 Grit Cardio 27
+  - 220421 (145)
+- Grit Cardio 26
+  - 220429 (146)
+- 🌟 Grit Cardio 25
+  - 220422 (147)
+- 🌟 Grit Cardio 24
+  - 220424 (142)
+- [🌟 Grit Cardio 23](../grit-23/cardio.md) 
+  - 220425 (140)
+- [Grit Cardio 22](../grit-22/cardio.md)
+  - 220428 (143)
+- Grit Cardio 21
+- Grit Cardio 20
+:::
