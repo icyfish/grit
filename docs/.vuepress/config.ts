@@ -27,7 +27,7 @@ export default defineUserConfig<DefaultThemeOptions>({
               { text: "🌟 Grit Cardio 23", link: "/grit-23/cardio.md" },
               { text: "🌟 Grit Cardio 39", link: "/grit-39/cardio.md" },
               {
-                text: "🐟's Cardio Tracker",
+                text: "🐟's Workout Tracker",
                 link: "/my/cardio.md"
               }
             ]
@@ -39,6 +39,9 @@ export default defineUserConfig<DefaultThemeOptions>({
         ]
       }
     ]
+  },
+  extendsMarkdown: md => {
+    md.use(require("markdown-it-task-lists"));
   },
   plugins: [
     [
