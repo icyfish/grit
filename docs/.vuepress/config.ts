@@ -1,15 +1,17 @@
+const { path } = require('@vuepress/utils')
 import { defineUserConfig } from "vuepress";
 import type { DefaultThemeOptions } from "vuepress";
 
 export default defineUserConfig<DefaultThemeOptions>({
   base: "/grit/",
   lang: "en-US",
-  description: "Workout",
+  title: "Fish",
+  description: "FISHES WISHES",
   // theme and its config
   theme: "@vuepress/theme-default",
   head: [['link', { rel: 'icon', href: '/images/fish.jpg' }]],
   themeConfig: {
-    logo: "/images/grit.png",
+    logo: "/images/fish.jpg",
     navbar: [
       {
         text: "💪 Fitness",
@@ -35,10 +37,6 @@ export default defineUserConfig<DefaultThemeOptions>({
               { text: "✅ Grit Cardio 22", link: "/fitness/grit-22/cardio.md" },
               { text: "🌟 Grit Cardio 23", link: "/fitness/grit-23/cardio.md" },
               { text: "🌟 Grit Cardio 39", link: "/fitness/grit-39/cardio.md" },
-              {
-                text: "🐟's Cardio Tracker",
-                link: "/fitness/my/cardio.md"
-              }
             ]
           },
           {
@@ -66,6 +64,12 @@ export default defineUserConfig<DefaultThemeOptions>({
           }
         }
       }
-    ]
+    ],
+    [
+      '@vuepress/register-components',
+      {
+        componentsDir: path.resolve(__dirname, './components'),
+      },
+    ],
   ]
 });
