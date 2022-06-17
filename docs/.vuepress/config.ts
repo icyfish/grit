@@ -1,4 +1,4 @@
-const { path } = require('@vuepress/utils')
+const { path } = require("@vuepress/utils");
 import { defineUserConfig } from "vuepress";
 import type { DefaultThemeOptions } from "vuepress";
 
@@ -9,45 +9,23 @@ export default defineUserConfig<DefaultThemeOptions>({
   description: "FISHES WISHES",
   // theme and its config
   theme: "@vuepress/theme-default",
-  head: [['link', { rel: 'icon', href: '/images/fish.jpg' }]],
+  head: [["link", { rel: "icon", href: "/images/fish.jpg" }]],
   themeConfig: {
     logo: "/images/fish.jpg",
-    navbar: [
-      {
-        text: "💪 Fitness",
-        link: "/fitness/",
-      },
-      {
-        text: "📚 Books",
-        link: "/books/",
-      }
-    ],
+    // navbar: [
+      // {
+      //   text: "📚 Books",
+      //   link: "/books/"
+      // }
+      // {
+      //   text: "💪 Fitness",
+      //   link: "/fitness/"
+      // }
+    // ],
     sidebar: [
       {
         text: "📌 Home",
         link: "/home/"
-      },
-      {
-        text: "💪 Fitness",
-        link: "/fitness/",
-        children: [
-          {
-            text: "Grit Cardio",
-            children: [
-              { text: "✅ Grit Cardio 22", link: "/fitness/grit-22/cardio.md" },
-              { text: "🌟 Grit Cardio 23", link: "/fitness/grit-23/cardio.md" },
-              { text: "🌟 Grit Cardio 39", link: "/fitness/grit-39/cardio.md" },
-            ]
-          },
-          {
-            text: "📝 Terms",
-            link: "/fitness/terms/index.md"
-          }
-        ]
-      },
-      {
-        text: "📚 Books",
-        link: "/books/",
       }
     ]
   },
@@ -66,10 +44,10 @@ export default defineUserConfig<DefaultThemeOptions>({
       }
     ],
     [
-      '@vuepress/register-components',
+      "@vuepress/register-components",
       {
-        componentsDir: path.resolve(__dirname, './components'),
-      },
-    ],
+        componentsDir: path.resolve(__dirname, "./components")
+      }
+    ]
   ]
 });
