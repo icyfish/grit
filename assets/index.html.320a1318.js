@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as s,a,b as n}from"./app.a7e93917.js";const o={},c={id:"fitness",tabindex:"-1"},_=a("a",{class:"header-anchor",href:"#fitness","aria-hidden":"true"},"#",-1),r=n(" Fitness"),i=[_,r];function d(h,f){return t(),s("h2",c,i)}var x=e(o,[["render",d],["__file","index.html.vue"]]);export{x as default};

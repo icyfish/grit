@@ -1,0 +1,1 @@
+import{_ as e,o,c as t,a as s,b as a}from"./app.a7e93917.js";const c={},_={id:"books",tabindex:"-1"},r=s("a",{class:"header-anchor",href:"#books","aria-hidden":"true"},"#",-1),n=a(" Books"),d=[r,n];function i(h,f){return o(),t("h2",_,d)}var x=e(c,[["render",i],["__file","index.html.vue"]]);export{x as default};
