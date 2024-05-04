@@ -6,12 +6,12 @@ spoiler: "感受生命中的一切。"
 
 Sky
 
-![sky](./230122_sky.JPG)
+![sky](230122_sky.JPG)
 
 Happiness
 
-![happiness](./230122_happiness.JPG)
+![happiness](230122_happiness.JPG)
 
 Braveness
 
-![braveness](./230122_braveness.jpg)
+![braveness](230122_braveness.jpg)
