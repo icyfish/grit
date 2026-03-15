@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #111;
+      color: #eee;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem 0.5rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    header p {
+      color: #888;
+      margin-top: 0.5rem;
+    }
+    .stats {
+      text-align: center;
+      color: #666;
+      font-size: 0.85rem;
+      padding: 0.5rem 0;
+    }
+    .stats span { color: #e84393; font-weight: 600; }
+
+    /* Toolbar: filters + sort */
+    .toolbar {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-row .label {
+      font-size: 0.75rem;
+      color: #666;
+      min-width: 2.5em;
+      text-align: right;
+    }
+    .filter-row button {
+      background: #222;
+      color: #ccc;
+      border: 1px solid #333;
+      padding: 0.35rem 0.85rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .filter-row button:hover { border-color: #555; color: #fff; }
+    .filter-row button.active {
+      background: #e84393;
+      color: #fff;
+      border-color: #e84393;
+    }
+    .filter-row button.who-btn.active {
+      background: transparent;
+      border-color: #e84393;
+      color: #e84393;
+    }
+
+    .sort-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: space-between;
+    }
+    .sort-row .left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sort-btn {
+      background: #222;
+      color: #ccc;
+      border: 1px solid #333;
+      padding: 0.35rem 0.85rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .sort-btn:hover { border-color: #555; color: #fff; }
+    .sort-btn .arrow { font-size: 0.7rem; }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1rem;
+      padding: 1rem 2rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); }
+    .card .img-wrap {
+      cursor: pointer;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .card .info {
+      padding: 0.6rem 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .card .info .date {
+      font-size: 0.78rem;
+      color: #888;
+    }
+    .card .info .title {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .card .info .tags {
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
+      margin-left: auto;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      background: #e84393;
+      color: #fff;
+      padding: 0.12rem 0.5rem;
+      border-radius: 1rem;
+      font-weight: 500;
+    }
+    .tag.athletic { background: #0984e3; }
+    .tag.strength { background: #fdcb6e; color: #333; }
+    .tag.camp { background: #6c5ce7; }
+    .tag.mix { background: #e17055; }
+    .who-tag {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 95vw;
+      max-height: 95vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    /* Empty state */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1rem;
+      color: #555;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+        gap: 0.75rem;
+      }
+      .toolbar { padding: 0.5rem 0.75rem; }
+      header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GRIT</h1>
+    <p>We have to be very strong.</p>
+  </header>
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <div class="filter-row" id="category-filters">
+      <span class="label">type</span>
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="cardio">Cardio</button>
+      <button data-filter="strength">Strength</button>
+      <button data-filter="athletic">Athletic/Plyo</button>
+      <button data-filter="camp">Camp</button>
+      <button data-filter="mix">Mix</button>
+    </div>
+    <div class="sort-row">
+      <div class="left">
+        <span class="label" style="font-size:0.75rem;color:#666;min-width:2.5em;text-align:right">who</span>
+        <div class="filter-row" id="who-filters" style="gap:0.35rem">
+          <button class="who-btn active" data-who="all">All</button>
+          <button class="who-btn" data-who="star">🌟</button>
+          <button class="who-btn" data-who="fish">🐟</button>
+          <button class="who-btn" data-who="both">🌟🐟</button>
+        </div>
+      </div>
+      <button class="sort-btn" id="sort-btn">
+        <span>Date</span>
+        <span class="arrow" id="sort-arrow">▼</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery"></div>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    const photos = [
+      {file:"2022-10-03-grit-strength-Strength.jpeg",date:"2022-10-03",category:"strength",label:"Strength",who:["fish"]},
+      {file:"2022-10-06-grit-strength-Strength.jpeg",date:"2022-10-06",category:"strength",label:"Strength",who:["fish"]},
+      {file:"2022-10-13-grit-strength-Strength.jpeg",date:"2022-10-13",category:"strength",label:"Strength",who:["fish"]},
+      {file:"2022-10-21-grit-strength-Strength.jpeg",date:"2022-10-21",category:"strength",label:"Strength",who:["fish"]},
+      {file:"2022-10-27-grit-strength-Strength.jpeg",date:"2022-10-27",category:"strength",label:"Strength",who:["fish"]},
+      {file:"2022-10-28-grit-strength-Strength.jpeg",date:"2022-10-28",category:"strength",label:"Strength",who:["fish"]},
+      {file:"2022-11-04-grit-strength-39.jpeg",date:"2022-11-04",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2022-11-10-grit-strength-39.jpeg",date:"2022-11-10",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2022-11-11-grit-strength-39.jpeg",date:"2022-11-11",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2022-11-17-grit-strength-39.jpeg",date:"2022-11-17",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2022-11-18-grit-strength-39.jpeg",date:"2022-11-18",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2022-11-24-grit-strength-33.jpeg",date:"2022-11-24",category:"strength",label:"Strength 33",who:["fish"]},
+      {file:"2022-11-25-grit-strength-33.jpeg",date:"2022-11-25",category:"strength",label:"Strength 33",who:["fish"]},
+      {file:"2022-12-02-grit-strength-33.jpeg",date:"2022-12-02",category:"strength",label:"Strength 33",who:["fish"]},
+      {file:"2022-12-09-grit-strength-33.jpeg",date:"2022-12-09",category:"strength",label:"Strength 33",who:["fish"]},
+      {file:"2023-01-04-grit-strength-42.jpeg",date:"2023-01-04",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2023-01-07-grit-strength-33.jpeg",date:"2023-01-07",category:"strength",label:"Strength 33",who:["fish"]},
+      {file:"2023-01-07-grit-strength-42.jpeg",date:"2023-01-07",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2023-01-11-grit-strength-42.jpeg",date:"2023-01-11",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2023-01-14-grit-strength-42.jpeg",date:"2023-01-14",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2023-02-02-grit-strength-42.jpeg",date:"2023-02-02",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2023-02-09-grit-strength-38.jpeg",date:"2023-02-09",category:"strength",label:"Strength 38",who:["fish"]},
+      {file:"2023-02-10-grit-strength-38.jpeg",date:"2023-02-10",category:"strength",label:"Strength 38",who:["fish"]},
+      {file:"2023-02-16-grit-strength-42.jpeg",date:"2023-02-16",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2023-02-17-grit-strength-39.jpeg",date:"2023-02-17",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2023-03-31-grit-strength-20.jpeg",date:"2023-03-31",category:"strength",label:"Strength 20",who:["fish"]},
+      {file:"2023-04-28-grit-strength-43.jpeg",date:"2023-04-28",category:"strength",label:"Strength 43",who:["fish"]},
+      {file:"2023-06-22-grit-strength-44.jpeg",date:"2023-06-22",category:"strength",label:"Strength 44",who:["fish"]},
+      {file:"2023-06-30-grit-strength-44.jpeg",date:"2023-06-30",category:"strength",label:"Strength 44",who:["fish"]},
+      {file:"2023-07-01-grit-cardio-29.jpeg",date:"2023-07-01",category:"cardio",label:"Cardio 29",who:["fish"]},
+      {file:"2023-07-03-grit-strength-20.jpeg",date:"2023-07-03",category:"strength",label:"Strength 20",who:["fish"]},
+      {file:"2023-07-04-grit-cardio-25.jpeg",date:"2023-07-04",category:"cardio",label:"Cardio 25",who:["fish"]},
+      {file:"2023-07-05-grit-strength-United.jpeg",date:"2023-07-05",category:"strength",label:"Strength United",who:["fish"]},
+      {file:"2023-07-06-grit-cardio-25.jpeg",date:"2023-07-06",category:"cardio",label:"Cardio 25",who:["fish"]},
+      {file:"2023-07-07-grit-cardio-30.jpeg",date:"2023-07-07",category:"cardio",label:"Cardio 30",who:["fish"]},
+      {file:"2023-07-09-grit-strength-44.jpeg",date:"2023-07-09",category:"strength",label:"Strength 44",who:["fish"]},
+      {file:"2023-07-10-grit-strength-United.jpeg",date:"2023-07-10",category:"strength",label:"Strength United",who:["fish"]},
+      {file:"2023-07-11-grit-cardio-39.jpeg",date:"2023-07-11",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2023-07-12-grit-strength-28.jpeg",date:"2023-07-12",category:"strength",label:"Strength 28",who:["fish"]},
+      {file:"2023-07-13-grit-athletic-25.jpeg",date:"2023-07-13",category:"athletic",label:"Plyo 25",who:["fish"]},
+      {file:"2023-07-13-grit-cardio-39.jpeg",date:"2023-07-13",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2023-07-14-grit-cardio-25.jpeg",date:"2023-07-14",category:"cardio",label:"Cardio 25",who:["fish"]},
+      {file:"2023-07-14-grit-strength-26.jpeg",date:"2023-07-14",category:"strength",label:"Strength 26",who:["fish"]},
+      {file:"2023-07-15-grit-cardio-29.jpeg",date:"2023-07-15",category:"cardio",label:"Cardio 29",who:["fish"]},
+      {file:"2023-07-16-grit-athletic-33.jpeg",date:"2023-07-16",category:"athletic",label:"Athletic 33",who:["fish"]},
+      {file:"2023-07-18-grit-cardio-29.jpeg",date:"2023-07-18",category:"cardio",label:"Cardio 29",who:["fish"]},
+      {file:"2023-07-19-grit-strength-39.jpeg",date:"2023-07-19",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2023-07-20-grit-cardio-39.jpeg",date:"2023-07-20",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2023-07-21-grit-cardio-28.jpeg",date:"2023-07-21",category:"cardio",label:"Cardio 28",who:["fish"]},
+      {file:"2023-07-22-grit-athletic-27.jpeg",date:"2023-07-22",category:"athletic",label:"Plyo 27",who:["fish"]},
+      {file:"2023-07-23-grit-athletic-32.jpeg",date:"2023-07-23",category:"athletic",label:"Athletic 32",who:["fish"]},
+      {file:"2023-07-24-grit-strength-21.jpeg",date:"2023-07-24",category:"strength",label:"Strength 21",who:["fish"]},
+      {file:"2023-07-25-grit-cardio-44.jpeg",date:"2023-07-25",category:"cardio",label:"Cardio 44",who:["fish"]},
+      {file:"2023-07-26-grit-strength-32.jpeg",date:"2023-07-26",category:"strength",label:"Strength 32",who:["fish"]},
+      {file:"2023-07-27-grit-athletic-21.jpeg",date:"2023-07-27",category:"athletic",label:"Plyo 21",who:["fish"]},
+      {file:"2023-07-27-grit-cardio-Nano.jpeg",date:"2023-07-27",category:"cardio",label:"Cardio Nano",who:["fish"]},
+      {file:"2023-07-28-grit-cardio-41.jpeg",date:"2023-07-28",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2023-07-29-grit-athletic-27.jpeg",date:"2023-07-29",category:"athletic",label:"Plyo 27",who:["fish"]},
+      {file:"2023-07-30-grit-athletic-41.jpeg",date:"2023-07-30",category:"athletic",label:"Athletic 41",who:["fish"]},
+      {file:"2023-07-31-grit-strength-21.jpeg",date:"2023-07-31",category:"strength",label:"Strength 21",who:["fish"]},
+      {file:"2023-08-01-grit-cardio-41.jpeg",date:"2023-08-01",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2023-08-03-grit-cardio-24.jpeg",date:"2023-08-03",category:"cardio",label:"Cardio 24",who:["fish"]},
+      {file:"2023-08-05-grit-athletic-25.jpeg",date:"2023-08-05",category:"athletic",label:"Plyo 25",who:["fish"]},
+      {file:"2023-08-06-grit-athletic-United.jpeg",date:"2023-08-06",category:"athletic",label:"Athletic United",who:["fish"]},
+      {file:"2023-08-08-grit-cardio-24.jpeg",date:"2023-08-08",category:"cardio",label:"Cardio 24",who:["fish"]},
+      {file:"2023-08-10-grit-cardio-30.jpeg",date:"2023-08-10",category:"cardio",label:"Cardio 30",who:["fish"]},
+      {file:"2023-08-12-grit-athletic-25.jpeg",date:"2023-08-12",category:"athletic",label:"Plyo 25",who:["fish"]},
+      {file:"2023-08-13-grit-strength-24.jpeg",date:"2023-08-13",category:"strength",label:"Strength 24",who:["fish"]},
+      {file:"2023-08-15-grit-cardio-39.jpeg",date:"2023-08-15",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2023-08-16-grit-athletic-36.jpeg",date:"2023-08-16",category:"athletic",label:"Athletic 36",who:["fish"]},
+      {file:"2023-08-17-grit-cardio-28.jpeg",date:"2023-08-17",category:"cardio",label:"Cardio 28",who:["fish"]},
+      {file:"2023-08-18-grit-cardio-28.jpeg",date:"2023-08-18",category:"cardio",label:"Cardio 28",who:["fish"]},
+      {file:"2023-08-20-grit-cardio-41.jpeg",date:"2023-08-20",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2023-08-21-grit-strength-24.jpeg",date:"2023-08-21",category:"strength",label:"Strength 24",who:["fish"]},
+      {file:"2023-08-22-grit-cardio-41.jpeg",date:"2023-08-22",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2023-08-24-grit-cardio-41.jpeg",date:"2023-08-24",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2023-08-25-grit-cardio-24.jpeg",date:"2023-08-25",category:"cardio",label:"Cardio 24",who:["fish"]},
+      {file:"2023-08-26-grit-athletic-26.jpeg",date:"2023-08-26",category:"athletic",label:"Plyo 26",who:["fish"]},
+      {file:"2023-08-27-grit-cardio-29.jpeg",date:"2023-08-27",category:"cardio",label:"Cardio 29",who:["fish"]},
+      {file:"2023-08-29-grit-cardio-36.jpeg",date:"2023-08-29",category:"cardio",label:"Cardio 36",who:["fish"]},
+      {file:"2023-09-03-grit-cardio-36.jpeg",date:"2023-09-03",category:"cardio",label:"Cardio 36",who:["fish"]},
+      {file:"2023-09-05-grit-cardio-31.jpeg",date:"2023-09-05",category:"cardio",label:"Cardio 31",who:["fish"]},
+      {file:"2023-09-06-grit-athletic-23.jpeg",date:"2023-09-06",category:"athletic",label:"Plyo 23",who:["fish"]},
+      {file:"2023-09-10-grit-cardio-31.jpeg",date:"2023-09-10",category:"cardio",label:"Cardio 31",who:["fish"]},
+      {file:"2023-09-11-grit-strength-30.jpeg",date:"2023-09-11",category:"strength",label:"Strength 30",who:["fish"]},
+      {file:"2023-09-12-grit-cardio-31.jpeg",date:"2023-09-12",category:"cardio",label:"Cardio 31",who:["fish"]},
+      {file:"2023-09-19-grit-cardio-31.jpeg",date:"2023-09-19",category:"cardio",label:"Cardio 31",who:["fish"]},
+      {file:"2023-09-22-grit-cardio-Nano.jpeg",date:"2023-09-22",category:"cardio",label:"Cardio Nano",who:["fish"]},
+      {file:"2023-09-26-grit-cardio-Nano.jpeg",date:"2023-09-26",category:"cardio",label:"Cardio Nano",who:["fish"]},
+      {file:"2023-09-29-grit-camp-1.jpeg",date:"2023-09-29",category:"camp",label:"Camp 1",who:["fish"]},
+      {file:"2023-09-30-grit-camp-2.jpeg",date:"2023-09-30",category:"camp",label:"Camp 2",who:["fish"]},
+      {file:"2023-10-01-grit-camp-3.jpeg",date:"2023-10-01",category:"camp",label:"Camp 3",who:["fish"]},
+      {file:"2023-10-02-grit-strength-45.jpeg",date:"2023-10-02",category:"strength",label:"Strength 45",who:["fish"]},
+      {file:"2023-10-03-grit-cardio-45.jpeg",date:"2023-10-03",category:"cardio",label:"Cardio 45",who:["fish"]},
+      {file:"2023-10-04-grit-athletic-45.jpeg",date:"2023-10-04",category:"athletic",label:"Athletic 45",who:["fish"]},
+      {file:"2023-10-05-grit-athletic-45.jpeg",date:"2023-10-05",category:"athletic",label:"Athletic 45",who:["fish"]},
+      {file:"2023-10-05-grit-cardio-45.jpeg",date:"2023-10-05",category:"cardio",label:"Cardio 45",who:["fish"]},
+      {file:"2023-10-17-grit-cardio-41.jpeg",date:"2023-10-17",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2023-10-19-grit-cardio-41.jpeg",date:"2023-10-19",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2023-10-29-grit-cardio-39.jpeg",date:"2023-10-29",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2023-10-29-grit-strength-38.jpeg",date:"2023-10-29",category:"strength",label:"Strength 38",who:["fish"]},
+      {file:"2023-11-07-grit-cardio-Nano.jpeg",date:"2023-11-07",category:"cardio",label:"Cardio Nano",who:["fish"]},
+      {file:"2023-11-11-grit-athletic-39.jpeg",date:"2023-11-11",category:"athletic",label:"Athletic 39",who:["fish"]},
+      {file:"2023-11-18-grit-strength-43.jpeg",date:"2023-11-18",category:"strength",label:"Strength 43",who:["fish"]},
+      {file:"2023-11-26-grit-cardio-38.jpeg",date:"2023-11-26",category:"cardio",label:"Cardio 38",who:["fish"]},
+      {file:"2023-12-10-grit-cardio-46.jpeg",date:"2023-12-10",category:"cardio",label:"Cardio 46",who:["fish"]},
+      {file:"2023-12-12-grit-cardio-46.jpeg",date:"2023-12-12",category:"cardio",label:"Cardio 46",who:["fish"]},
+      {file:"2023-12-15-grit-cardio-29.jpeg",date:"2023-12-15",category:"cardio",label:"Cardio 29",who:["fish"]},
+      {file:"2023-12-17-grit-cardio-29.jpeg",date:"2023-12-17",category:"cardio",label:"Cardio 29",who:["fish"]},
+      {file:"2023-12-19-grit-cardio-46.jpeg",date:"2023-12-19",category:"cardio",label:"Cardio 46",who:["fish"]},
+      {file:"2023-12-28-grit-cardio-24.jpeg",date:"2023-12-28",category:"cardio",label:"Cardio 24",who:["fish"]},
+      {file:"2023-12-30-grit-strength-45.jpeg",date:"2023-12-30",category:"strength",label:"Strength 45",who:["fish"]},
+      {file:"2023-12-31-grit-cardio-30.jpeg",date:"2023-12-31",category:"cardio",label:"Cardio 30",who:["fish"]},
+      {file:"2024-01-02-grit-cardio-Nina.jpeg",date:"2024-01-02",category:"cardio",label:"Cardio Nina",who:["fish"]},
+      {file:"2024-01-06-grit-athletic-United.jpeg",date:"2024-01-06",category:"athletic",label:"Athletic United",who:["fish"]},
+      {file:"2024-02-18-grit-cardio-31.jpeg",date:"2024-02-18",category:"cardio",label:"Cardio 31",who:["fish"]},
+      {file:"2024-02-20-grit-cardio-Nano.jpeg",date:"2024-02-20",category:"cardio",label:"Cardio Nano",who:["fish"]},
+      {file:"2024-02-22-grit-cardio-Nina.jpeg",date:"2024-02-22",category:"cardio",label:"Cardio Nina",who:["fish"]},
+      {file:"2024-02-24-grit-athletic-39.jpeg",date:"2024-02-24",category:"athletic",label:"Athletic 39",who:["fish"]},
+      {file:"2024-02-25-grit-cardio-39.jpeg",date:"2024-02-25",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2024-02-29-grit-cardio-39.jpeg",date:"2024-02-29",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2024-03-03-grit-cardio-39.jpeg",date:"2024-03-03",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2024-03-05-grit-athletic-31.jpeg",date:"2024-03-05",category:"athletic",label:"Athletic 31",who:["fish"]},
+      {file:"2024-03-07-grit-cardio-30.jpeg",date:"2024-03-07",category:"cardio",label:"Cardio 30",who:["fish"]},
+      {file:"2024-03-14-grit-cardio-36.jpeg",date:"2024-03-14",category:"cardio",label:"Cardio 36",who:["fish"]},
+      {file:"2024-03-21-grit-strength-45.jpeg",date:"2024-03-21",category:"strength",label:"Strength 45",who:["fish"]},
+      {file:"2024-03-23-grit-athletic-26.jpeg",date:"2024-03-23",category:"athletic",label:"Plyo 26",who:["fish"]},
+      {file:"2024-03-23-grit-strength-41.jpeg",date:"2024-03-23",category:"strength",label:"Strength 41",who:["fish"]},
+      {file:"2024-03-26-grit-cardio-36.jpeg",date:"2024-03-26",category:"cardio",label:"Cardio 36",who:["fish"]},
+      {file:"2024-03-27-grit-strength-41.jpeg",date:"2024-03-27",category:"strength",label:"Strength 41",who:["fish"]},
+      {file:"2024-04-03-grit-strength-47.jpeg",date:"2024-04-03",category:"strength",label:"Strength 47",who:["fish"]},
+      {file:"2024-04-05-grit-cardio-47.jpeg",date:"2024-04-05",category:"cardio",label:"Cardio 47",who:["fish"]},
+      {file:"2024-04-11-grit-cardio-47.jpeg",date:"2024-04-11",category:"cardio",label:"Cardio 47",who:["fish"]},
+      {file:"2024-05-01-grit-athletic-38.jpeg",date:"2024-05-01",category:"athletic",label:"Athletic 38",who:["fish"]},
+      {file:"2024-05-04-grit-strength-16.jpeg",date:"2024-05-04",category:"strength",label:"Strength 16",who:["fish"]},
+      {file:"2024-05-08-grit-strength-16.jpeg",date:"2024-05-08",category:"strength",label:"Strength 16",who:["fish"]},
+      {file:"2024-05-22-grit-strength-42.jpeg",date:"2024-05-22",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2024-05-25-grit-athletic-20.jpeg",date:"2024-05-25",category:"athletic",label:"Plyo 20",who:["fish"]},
+      {file:"2024-05-25-grit-strength-20.jpeg",date:"2024-05-25",category:"strength",label:"Strength 20",who:["fish"]},
+      {file:"2024-05-26-grit-cardio-23.jpeg",date:"2024-05-26",category:"cardio",label:"Cardio 23",who:["fish"]},
+      {file:"2024-05-29-grit-strength-23.jpeg",date:"2024-05-29",category:"strength",label:"Strength 23",who:["fish"]},
+      {file:"2024-06-05-grit-strength-48.jpeg",date:"2024-06-05",category:"strength",label:"Strength 48",who:["fish"]},
+      {file:"2024-06-12-grit-strength-30.jpeg",date:"2024-06-12",category:"strength",label:"Strength 30",who:["fish"]},
+      {file:"2024-06-15-grit-athletic-43.jpeg",date:"2024-06-15",category:"athletic",label:"Athletic 43",who:["fish"]},
+      {file:"2024-06-22-grit-athletic-29.jpeg",date:"2024-06-22",category:"athletic",label:"Plyo 29",who:["fish"]},
+      {file:"2024-06-30-grit-athletic-30.jpeg",date:"2024-06-30",category:"athletic",label:"Plyo 30",who:["fish"]},
+      {file:"2024-07-07-grit-strength-35.jpeg",date:"2024-07-07",category:"strength",label:"Strength 35",who:["fish"]},
+      {file:"2024-07-11-grit-cardio-36.jpeg",date:"2024-07-11",category:"cardio",label:"Cardio 36",who:["fish"]},
+      {file:"2024-07-12-grit-strength-21.jpeg",date:"2024-07-12",category:"strength",label:"Strength 21",who:["fish"]},
+      {file:"2024-07-14-grit-strength-26.jpeg",date:"2024-07-14",category:"strength",label:"Strength 26",who:["fish"]},
+      {file:"2024-07-14-grit-strength-47.jpeg",date:"2024-07-14",category:"strength",label:"Strength 47",who:["fish"]},
+      {file:"2024-07-19-grit-strength-24.jpeg",date:"2024-07-19",category:"strength",label:"Strength 24",who:["fish"]},
+      {file:"2024-07-21-grit-strength-24.jpeg",date:"2024-07-21",category:"strength",label:"Strength 24",who:["fish"]},
+      {file:"2024-07-26-grit-strength-48.jpeg",date:"2024-07-26",category:"strength",label:"Strength 48",who:["fish"]},
+      {file:"2024-07-28-grit-athletic-36.jpeg",date:"2024-07-28",category:"athletic",label:"Athletic 36",who:["fish"]},
+      {file:"2024-08-01-grit-cardio-41.jpeg",date:"2024-08-01",category:"cardio",label:"Cardio 41",who:["fish"]},
+      {file:"2024-08-02-grit-strength-35.jpeg",date:"2024-08-02",category:"strength",label:"Strength 35",who:["fish"]},
+      {file:"2024-08-03-grit-strength-43.jpeg",date:"2024-08-03",category:"strength",label:"Strength 43",who:["fish"]},
+      {file:"2024-08-04-grit-athletic-26.jpeg",date:"2024-08-04",category:"athletic",label:"Plyo 26",who:["fish"]},
+      {file:"2024-08-04-grit-cardio-43.jpeg",date:"2024-08-04",category:"cardio",label:"Cardio 43",who:["fish"]},
+      {file:"2024-08-07-grit-strength-40.jpeg",date:"2024-08-07",category:"strength",label:"Strength 40",who:["fish"]},
+      {file:"2024-08-08-grit-cardio-28.jpeg",date:"2024-08-08",category:"cardio",label:"Cardio 28",who:["fish"]},
+      {file:"2024-08-09-grit-strength-38.jpeg",date:"2024-08-09",category:"strength",label:"Strength 38",who:["fish"]},
+      {file:"2024-08-11-grit-athletic-20.jpeg",date:"2024-08-11",category:"athletic",label:"Plyo 20",who:["fish"]},
+      {file:"2024-08-13-grit-athletic-20.jpeg",date:"2024-08-13",category:"athletic",label:"Plyo 20",who:["fish"]},
+      {file:"2024-08-16-grit-strength-44.jpeg",date:"2024-08-16",category:"strength",label:"Strength 44",who:["fish"]},
+      {file:"2024-08-17-grit-athletic-32.jpeg",date:"2024-08-17",category:"athletic",label:"Athletic 32",who:["fish"]},
+      {file:"2024-08-18-grit-athletic-23.jpeg",date:"2024-08-18",category:"athletic",label:"Plyo 23",who:["fish"]},
+      {file:"2024-08-22-grit-camp-Marathon.jpeg",date:"2024-08-22",category:"camp",label:"Camp Marathon",who:["fish"]},
+      {file:"2024-08-23-grit-strength-39.jpeg",date:"2024-08-23",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2024-08-25-grit-athletic-40.jpeg",date:"2024-08-25",category:"athletic",label:"Athletic 40",who:["fish"]},
+      {file:"2024-08-27-grit-athletic-United.jpeg",date:"2024-08-27",category:"athletic",label:"Athletic United",who:["fish"]},
+      {file:"2024-08-28-grit-strength-28.jpeg",date:"2024-08-28",category:"strength",label:"Strength 28",who:["fish"]},
+      {file:"2024-08-29-grit-camp-Marathon.jpeg",date:"2024-08-29",category:"camp",label:"Camp Marathon",who:["fish"]},
+      {file:"2024-08-31-grit-athletic-49.jpeg",date:"2024-08-31",category:"athletic",label:"Athletic 49",who:["fish"]},
+      {file:"2024-09-01-grit-athletic-49.jpeg",date:"2024-09-01",category:"athletic",label:"Athletic 49",who:["fish"]},
+      {file:"2024-09-06-grit-strength-49.jpeg",date:"2024-09-06",category:"strength",label:"Strength 49",who:["fish"]},
+      {file:"2024-09-08-grit-camp-Marathon.jpeg",date:"2024-09-08",category:"camp",label:"Camp Marathon",who:["fish"]},
+      {file:"2024-09-11-grit-strength-29.jpeg",date:"2024-09-11",category:"strength",label:"Strength 29",who:["fish"]},
+      {file:"2024-09-14-grit-camp-Marathon.jpeg",date:"2024-09-14",category:"camp",label:"Camp Marathon",who:["fish"]},
+      {file:"2024-09-15-grit-camp-Marathon.jpeg",date:"2024-09-15",category:"camp",label:"Camp Marathon",who:["fish"]},
+      {file:"2024-09-18-grit-strength-30.jpeg",date:"2024-09-18",category:"strength",label:"Strength 30",who:["fish"]},
+      {file:"2024-09-19-grit-camp-Marathon.jpeg",date:"2024-09-19",category:"camp",label:"Camp Marathon",who:["star"]},
+      {file:"2024-09-20-grit-strength-36.jpeg",date:"2024-09-20",category:"strength",label:"Strength 36",who:["fish"]},
+      {file:"2024-09-21-grit-athletic-26.jpeg",date:"2024-09-21",category:"athletic",label:"Plyo 26",who:["fish"]},
+      {file:"2024-09-22-grit-camp-Marathon.jpeg",date:"2024-09-22",category:"camp",label:"Camp Marathon",who:["fish"]},
+      {file:"2024-09-26-grit-camp-Marathon.jpeg",date:"2024-09-26",category:"camp",label:"Camp Marathon",who:["star"]},
+      {file:"2024-09-27-grit-strength-34.jpeg",date:"2024-09-27",category:"strength",label:"Strength 34",who:["fish"]},
+      {file:"2024-09-28-grit-camp-Marathon.jpeg",date:"2024-09-28",category:"camp",label:"Camp Marathon",who:["star"]},
+      {file:"2024-09-29-grit-camp-Marathon.jpeg",date:"2024-09-29",category:"camp",label:"Camp Marathon",who:["star"]},
+      {file:"2024-09-30-grit-cardio-23.jpeg",date:"2024-09-30",category:"cardio",label:"Cardio 23",who:["star"]},
+      {file:"2024-10-01-grit-athletic-41.jpeg",date:"2024-10-01",category:"athletic",label:"Athletic 41",who:["fish","star"]},
+      {file:"2024-10-01-grit-strength-21.jpeg",date:"2024-10-01",category:"strength",label:"Strength 21",who:["star"]},
+      {file:"2024-10-02-grit-cardio-Nina.jpeg",date:"2024-10-02",category:"cardio",label:"Cardio Nina",who:["fish"]},
+      {file:"2024-10-02-grit-strength-42.jpeg",date:"2024-10-02",category:"strength",label:"Strength 42",who:["fish"]},
+      {file:"2024-10-03-grit-camp-Marathon.jpeg",date:"2024-10-03",category:"camp",label:"Camp Marathon",who:["fish","star"]},
+      {file:"2024-10-04-grit-strength-44.jpeg",date:"2024-10-04",category:"strength",label:"Strength 44",who:["fish"]},
+      {file:"2024-10-05-grit-camp-Marathon.jpeg",date:"2024-10-05",category:"camp",label:"Camp Marathon",who:["fish","star"]},
+      {file:"2024-10-06-grit-camp-Marathon.jpeg",date:"2024-10-06",category:"camp",label:"Camp Marathon",who:["fish"]},
+      {file:"2024-10-07-grit-camp-Marathon.jpeg",date:"2024-10-07",category:"camp",label:"Camp Marathon",who:["fish","star"]},
+      {file:"2024-10-09-grit-strength-44.jpeg",date:"2024-10-09",category:"strength",label:"Strength 44",who:["fish"]},
+      {file:"2024-10-10-grit-camp-Marathon.jpeg",date:"2024-10-10",category:"camp",label:"Camp Marathon",who:["star"]},
+      {file:"2024-10-12-grit-strength-35.jpeg",date:"2024-10-12",category:"strength",label:"Strength 35",who:["fish"]},
+      {file:"2024-10-13-grit-camp-Camp.jpeg",date:"2024-10-13",category:"camp",label:"Camp",who:["fish"]},
+      {file:"2024-10-16-grit-strength-48.jpeg",date:"2024-10-16",category:"strength",label:"Strength 48",who:["fish"]},
+      {file:"2024-10-17-grit-strength-47.jpeg",date:"2024-10-17",category:"strength",label:"Strength 47",who:["star"]},
+      {file:"2024-10-19-grit-athletic-27.jpeg",date:"2024-10-19",category:"athletic",label:"Plyo 27",who:["fish"]},
+      {file:"2024-10-20-grit-camp-Camp.jpeg",date:"2024-10-20",category:"camp",label:"Camp",who:["fish"]},
+      {file:"2024-10-22-grit-athletic-39.jpeg",date:"2024-10-22",category:"athletic",label:"Athletic 39",who:["fish"]},
+      {file:"2024-10-23-grit-strength-20.jpeg",date:"2024-10-23",category:"strength",label:"Strength 20",who:["fish"]},
+      {file:"2024-10-24-grit-athletic-41.jpeg",date:"2024-10-24",category:"athletic",label:"Athletic 41",who:["fish"]},
+      {file:"2024-10-24-grit-strength-25.jpeg",date:"2024-10-24",category:"strength",label:"Strength 25",who:["star"]},
+      {file:"2024-10-25-grit-athletic-25.jpeg",date:"2024-10-25",category:"athletic",label:"Plyo 25",who:["star"]},
+      {file:"2024-10-25-grit-strength-25.jpeg",date:"2024-10-25",category:"strength",label:"Strength 25",who:["star"]},
+      {file:"2024-10-25-grit-strength-43.jpeg",date:"2024-10-25",category:"strength",label:"Strength 43",who:["fish"]},
+      {file:"2024-10-26-grit-camp-Camp.jpeg",date:"2024-10-26",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-10-27-grit-camp-Camp.jpeg",date:"2024-10-27",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-10-29-grit-athletic-38.jpeg",date:"2024-10-29",category:"athletic",label:"Athletic 38",who:["fish"]},
+      {file:"2024-10-30-grit-strength-39.jpeg",date:"2024-10-30",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2024-10-30-grit-strength-48.jpeg",date:"2024-10-30",category:"strength",label:"Strength 48",who:["star"]},
+      {file:"2024-10-31-grit-athletic-32.jpeg",date:"2024-10-31",category:"athletic",label:"Athletic 32",who:["fish","star"]},
+      {file:"2024-11-03-grit-camp-Camp.jpeg",date:"2024-11-03",category:"camp",label:"Camp",who:["fish"]},
+      {file:"2024-11-05-grit-athletic-42.jpeg",date:"2024-11-05",category:"athletic",label:"Athletic 42",who:["fish"]},
+      {file:"2024-11-06-grit-strength-29.jpeg",date:"2024-11-06",category:"strength",label:"Strength 29",who:["fish"]},
+      {file:"2024-11-07-grit-athletic-35.jpeg",date:"2024-11-07",category:"athletic",label:"Athletic 35",who:["fish","star"]},
+      {file:"2024-11-07-grit-strength-22.jpeg",date:"2024-11-07",category:"strength",label:"Strength 22",who:["star"]},
+      {file:"2024-11-08-grit-cardio-39.jpeg",date:"2024-11-08",category:"cardio",label:"Cardio 39",who:["star"]},
+      {file:"2024-11-08-grit-strength-47.jpeg",date:"2024-11-08",category:"strength",label:"Strength 47",who:["star"]},
+      {file:"2024-11-09-grit-camp-Camp.jpeg",date:"2024-11-09",category:"camp",label:"Camp",who:["star"]},
+      {file:"2024-11-09-grit-cardio-37.jpeg",date:"2024-11-09",category:"cardio",label:"Cardio 37",who:["fish"]},
+      {file:"2024-11-09-grit-strength-45.jpeg",date:"2024-11-09",category:"strength",label:"Strength 45",who:["star"]},
+      {file:"2024-11-10-grit-camp-Camp.jpeg",date:"2024-11-10",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-11-12-grit-athletic-32.jpeg",date:"2024-11-12",category:"athletic",label:"Athletic 32",who:["fish"]},
+      {file:"2024-11-13-grit-strength-47.jpeg",date:"2024-11-13",category:"strength",label:"Strength 47",who:["fish","star"]},
+      {file:"2024-11-14-grit-cardio-30.jpeg",date:"2024-11-14",category:"cardio",label:"Cardio 30",who:["fish","star"]},
+      {file:"2024-11-14-grit-strength-28.jpeg",date:"2024-11-14",category:"strength",label:"Strength 28",who:["star"]},
+      {file:"2024-11-15-grit-cardio-United.jpeg",date:"2024-11-15",category:"cardio",label:"Cardio United",who:["star"]},
+      {file:"2024-11-16-grit-camp-Camp.jpeg",date:"2024-11-16",category:"camp",label:"Camp",who:["star"]},
+      {file:"2024-11-17-grit-camp-Camp.jpeg",date:"2024-11-17",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-11-19-grit-athletic-25.jpeg",date:"2024-11-19",category:"athletic",label:"Plyo 25",who:["fish"]},
+      {file:"2024-11-20-grit-strength-20.jpeg",date:"2024-11-20",category:"strength",label:"Strength 20",who:["fish"]},
+      {file:"2024-11-21-grit-athletic-42.jpeg",date:"2024-11-21",category:"athletic",label:"Athletic 42",who:["fish","star"]},
+      {file:"2024-11-21-grit-cardio-Nina.jpeg",date:"2024-11-21",category:"cardio",label:"Cardio Nina",who:["fish","star"]},
+      {file:"2024-11-21-grit-strength-47.jpeg",date:"2024-11-21",category:"strength",label:"Strength 47",who:["star"]},
+      {file:"2024-11-22-grit-cardio-United.jpeg",date:"2024-11-22",category:"cardio",label:"Cardio United",who:["star"]},
+      {file:"2024-11-23-grit-cardio-32.jpeg",date:"2024-11-23",category:"cardio",label:"Cardio 32",who:["fish"]},
+      {file:"2024-11-24-grit-camp-Camp.jpeg",date:"2024-11-24",category:"camp",label:"Camp",who:["fish"]},
+      {file:"2024-11-24-grit-cardio-39.jpeg",date:"2024-11-24",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2024-11-25-grit-athletic-29.jpeg",date:"2024-11-25",category:"athletic",label:"Plyo 29",who:["fish"]},
+      {file:"2024-11-26-grit-athletic-33.jpeg",date:"2024-11-26",category:"athletic",label:"Athletic 33",who:["fish"]},
+      {file:"2024-11-26-grit-strength-47.jpeg",date:"2024-11-26",category:"strength",label:"Strength 47",who:["star"]},
+      {file:"2024-11-27-grit-athletic-39.jpeg",date:"2024-11-27",category:"athletic",label:"Athletic 39",who:["star"]},
+      {file:"2024-11-27-grit-strength-21.jpeg",date:"2024-11-27",category:"strength",label:"Strength 21",who:["fish","star"]},
+      {file:"2024-11-28-grit-cardio-24.jpeg",date:"2024-11-28",category:"cardio",label:"Cardio 24",who:["fish","star"]},
+      {file:"2024-11-29-grit-cardio-30.jpeg",date:"2024-11-29",category:"cardio",label:"Cardio 30",who:["star"]},
+      {file:"2024-11-29-grit-cardio-36.jpeg",date:"2024-11-29",category:"cardio",label:"Cardio 36",who:["fish"]},
+      {file:"2024-11-29-grit-strength-21.jpeg",date:"2024-11-29",category:"strength",label:"Strength 21",who:["star"]},
+      {file:"2024-11-30-grit-camp-Camp.jpeg",date:"2024-11-30",category:"camp",label:"Camp",who:["star"]},
+      {file:"2024-11-30-grit-cardio-50.jpeg",date:"2024-11-30",category:"cardio",label:"Cardio 50",who:["fish"]},
+      {file:"2024-12-01-grit-camp-Camp.jpeg",date:"2024-12-01",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-01-grit-cardio-50.jpeg",date:"2024-12-01",category:"cardio",label:"Cardio 50",who:["fish","star"]},
+      {file:"2024-12-03-grit-athletic-50.jpeg",date:"2024-12-03",category:"athletic",label:"Athletic 50",who:["fish","star"]},
+      {file:"2024-12-04-grit-athletic-50.jpeg",date:"2024-12-04",category:"athletic",label:"Athletic 50",who:["star"]},
+      {file:"2024-12-04-grit-strength-50.jpeg",date:"2024-12-04",category:"strength",label:"Strength 50",who:["fish","star"]},
+      {file:"2024-12-05-grit-cardio-50.jpeg",date:"2024-12-05",category:"cardio",label:"Cardio 50",who:["fish","star"]},
+      {file:"2024-12-06-grit-cardio-50.jpeg",date:"2024-12-06",category:"cardio",label:"Cardio 50",who:["star"]},
+      {file:"2024-12-07-grit-camp-Camp.jpeg",date:"2024-12-07",category:"camp",label:"Camp",who:["star"]},
+      {file:"2024-12-07-grit-cardio-47.jpeg",date:"2024-12-07",category:"cardio",label:"Cardio 47",who:["fish"]},
+      {file:"2024-12-08-grit-camp-Camp.jpeg",date:"2024-12-08",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-08-grit-cardio-50.jpeg",date:"2024-12-08",category:"cardio",label:"Cardio 50",who:["fish","star"]},
+      {file:"2024-12-10-grit-athletic-26.jpeg",date:"2024-12-10",category:"athletic",label:"Plyo 26",who:["fish","star"]},
+      {file:"2024-12-11-grit-strength-28.jpeg",date:"2024-12-11",category:"strength",label:"Strength 28",who:["fish","star"]},
+      {file:"2024-12-12-grit-cardio-31.jpeg",date:"2024-12-12",category:"cardio",label:"Cardio 31",who:["fish","star"]},
+      {file:"2024-12-14-grit-camp-Camp.jpeg",date:"2024-12-14",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-15-grit-camp-Camp.jpeg",date:"2024-12-15",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-17-grit-athletic-45.jpeg",date:"2024-12-17",category:"athletic",label:"Athletic 45",who:["fish","star"]},
+      {file:"2024-12-19-grit-cardio-41.jpeg",date:"2024-12-19",category:"cardio",label:"Cardio 41",who:["fish","star"]},
+      {file:"2024-12-20-grit-athletic-34.jpeg",date:"2024-12-20",category:"athletic",label:"Athletic 34",who:["star"]},
+      {file:"2024-12-21-grit-camp-Camp.jpeg",date:"2024-12-21",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-22-grit-camp-Camp.jpeg",date:"2024-12-22",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-24-grit-athletic-United.jpeg",date:"2024-12-24",category:"athletic",label:"Athletic United",who:["fish","star"]},
+      {file:"2024-12-26-grit-cardio-36.jpeg",date:"2024-12-26",category:"cardio",label:"Cardio 36",who:["fish","star"]},
+      {file:"2024-12-28-grit-camp-Camp.jpeg",date:"2024-12-28",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-29-grit-camp-Camp.jpeg",date:"2024-12-29",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2024-12-31-grit-athletic-50.jpeg",date:"2024-12-31",category:"athletic",label:"Athletic 50",who:["fish","star"]},
+      {file:"2024-12-31-grit-camp-Camp.jpeg",date:"2024-12-31",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-01-01-grit-camp-Camp.jpeg",date:"2025-01-01",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-01-02-grit-cardio-38.jpeg",date:"2025-01-02",category:"cardio",label:"Cardio 38",who:["fish","star"]},
+      {file:"2025-01-03-grit-athletic-32.jpeg",date:"2025-01-03",category:"athletic",label:"Athletic 32",who:["fish","star"]},
+      {file:"2025-01-05-grit-camp-Camp.jpeg",date:"2025-01-05",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-01-07-grit-athletic-35.jpeg",date:"2025-01-07",category:"athletic",label:"Athletic 35",who:["fish","star"]},
+      {file:"2025-01-08-grit-athletic-38.jpeg",date:"2025-01-08",category:"athletic",label:"Athletic 38",who:["fish","star"]},
+      {file:"2025-01-09-grit-cardio-Nano.jpeg",date:"2025-01-09",category:"cardio",label:"Cardio Nano",who:["fish","star"]},
+      {file:"2025-01-11-grit-camp-Camp.jpeg",date:"2025-01-11",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-01-11-grit-strength-36.jpeg",date:"2025-01-11",category:"strength",label:"Strength 36",who:["fish","star"]},
+      {file:"2025-01-12-grit-camp-Camp.jpeg",date:"2025-01-12",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-01-16-grit-cardio-29.jpeg",date:"2025-01-16",category:"cardio",label:"Cardio 29",who:["fish","star"]},
+      {file:"2025-01-21-grit-athletic-32.jpeg",date:"2025-01-21",category:"athletic",label:"Athletic 32",who:["fish","star"]},
+      {file:"2025-01-23-grit-athletic-27.jpeg",date:"2025-01-23",category:"athletic",label:"Plyo 27",who:["fish","star"]},
+      {file:"2025-01-23-grit-cardio-24.jpeg",date:"2025-01-23",category:"cardio",label:"Cardio 24",who:["fish","star"]},
+      {file:"2025-01-25-grit-cardio-24.jpeg",date:"2025-01-25",category:"cardio",label:"Cardio 24",who:["fish"]},
+      {file:"2025-01-26-grit-athletic-29.jpeg",date:"2025-01-26",category:"athletic",label:"Plyo 29",who:["fish"]},
+      {file:"2025-01-31-grit-cardio-29.jpeg",date:"2025-01-31",category:"cardio",label:"Cardio 29",who:["fish"]},
+      {file:"2025-02-01-grit-strength-21.jpeg",date:"2025-02-01",category:"strength",label:"Strength 21",who:["fish"]},
+      {file:"2025-02-02-grit-camp-Camp.jpeg",date:"2025-02-02",category:"camp",label:"Camp",who:["fish"]},
+      {file:"2025-02-02-grit-strength-49.jpeg",date:"2025-02-02",category:"strength",label:"Strength 49",who:["fish"]},
+      {file:"2025-02-03-grit-athletic-43.jpeg",date:"2025-02-03",category:"athletic",label:"Athletic 43",who:["fish"]},
+      {file:"2025-02-04-grit-camp-Camp.jpeg",date:"2025-02-04",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-02-06-grit-cardio-28.jpeg",date:"2025-02-06",category:"cardio",label:"Cardio 28",who:["fish","star"]},
+      {file:"2025-02-09-grit-camp-Camp.jpeg",date:"2025-02-09",category:"camp",label:"Camp",who:["fish"]},
+      {file:"2025-02-13-grit-strength-25.jpeg",date:"2025-02-13",category:"strength",label:"Strength 25",who:["fish"]},
+      {file:"2025-02-15-grit-mix-21.jpeg",date:"2025-02-15",category:"mix",label:"Mix 21",who:["fish"]},
+      {file:"2025-02-18-grit-athletic-43.jpeg",date:"2025-02-18",category:"athletic",label:"Athletic 43",who:["fish"]},
+      {file:"2025-03-19-grit-strength-51.jpeg",date:"2025-03-19",category:"strength",label:"Strength 51",who:["star"]},
+      {file:"2025-03-22-grit-strength-51.jpeg",date:"2025-03-22",category:"strength",label:"Strength 51",who:["fish","star"]},
+      {file:"2025-04-23-grit-strength-31.jpeg",date:"2025-04-23",category:"strength",label:"Strength 31",who:["fish","star"]},
+      {file:"2025-04-25-grit-strength-31.jpeg",date:"2025-04-25",category:"strength",label:"Strength 31",who:["fish","star"]},
+      {file:"2025-04-26-grit-strength-24.jpeg",date:"2025-04-26",category:"strength",label:"Strength 24",who:["fish","star"]},
+      {file:"2025-04-27-grit-strength-24.jpeg",date:"2025-04-27",category:"strength",label:"Strength 24",who:["fish"]},
+      {file:"2025-04-30-grit-strength-49.jpeg",date:"2025-04-30",category:"strength",label:"Strength 49",who:["fish","star"]},
+      {file:"2025-04-30-grit-strength-50.jpeg",date:"2025-04-30",category:"strength",label:"Strength 50",who:["fish","star"]},
+      {file:"2025-05-01-grit-cardio-51.jpeg",date:"2025-05-01",category:"cardio",label:"Cardio 51",who:["fish","star"]},
+      {file:"2025-05-02-grit-strength-33.jpeg",date:"2025-05-02",category:"strength",label:"Strength 33",who:["fish","star"]},
+      {file:"2025-05-03-grit-strength-35.jpeg",date:"2025-05-03",category:"strength",label:"Strength 35",who:["fish","star"]},
+      {file:"2025-05-05-grit-strength-36.jpeg",date:"2025-05-05",category:"strength",label:"Strength 36",who:["fish","star"]},
+      {file:"2025-05-06-grit-strength-21.jpeg",date:"2025-05-06",category:"strength",label:"Strength 21",who:["fish","star"]},
+      {file:"2025-05-07-grit-strength-39.jpeg",date:"2025-05-07",category:"strength",label:"Strength 39",who:["fish","star"]},
+      {file:"2025-05-08-grit-cardio-30.jpeg",date:"2025-05-08",category:"cardio",label:"Cardio 30",who:["fish","star"]},
+      {file:"2025-05-08-grit-strength-45.jpeg",date:"2025-05-08",category:"strength",label:"Strength 45",who:["fish","star"]},
+      {file:"2025-05-10-grit-strength-21.jpeg",date:"2025-05-10",category:"strength",label:"Strength 21",who:["fish","star"]},
+      {file:"2025-05-11-grit-camp-Camp.jpeg",date:"2025-05-11",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-05-13-grit-athletic-45.jpeg",date:"2025-05-13",category:"athletic",label:"Athletic 45",who:["fish","star"]},
+      {file:"2025-05-14-grit-strength-32.jpeg",date:"2025-05-14",category:"strength",label:"Strength 32",who:["fish","star"]},
+      {file:"2025-05-16-grit-strength-30.jpeg",date:"2025-05-16",category:"strength",label:"Strength 30",who:["fish","star"]},
+      {file:"2025-05-17-grit-strength-48.jpeg",date:"2025-05-17",category:"strength",label:"Strength 48",who:["fish","star"]},
+      {file:"2025-05-18-grit-camp-Camp.jpeg",date:"2025-05-18",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-05-20-grit-athletic-20.jpeg",date:"2025-05-20",category:"athletic",label:"Plyo 20",who:["fish","star"]},
+      {file:"2025-05-21-grit-strength-35.jpeg",date:"2025-05-21",category:"strength",label:"Strength 35",who:["fish","star"]},
+      {file:"2025-05-24-grit-strength-49.jpeg",date:"2025-05-24",category:"strength",label:"Strength 49",who:["fish","star"]},
+      {file:"2025-05-25-grit-camp-Camp.jpeg",date:"2025-05-25",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-05-28-grit-strength-24.jpeg",date:"2025-05-28",category:"strength",label:"Strength 24",who:["fish","star"]},
+      {file:"2025-05-28-grit-strength-52.jpeg",date:"2025-05-28",category:"strength",label:"Strength 52",who:["star"]},
+      {file:"2025-05-29-grit-strength-52.jpeg",date:"2025-05-29",category:"strength",label:"Strength 52",who:["fish","star"]},
+      {file:"2025-05-31-grit-cardio-Nina.jpeg",date:"2025-05-31",category:"cardio",label:"Cardio Nina",who:["fish","star"]},
+      {file:"2025-05-31-grit-strength-21.jpeg",date:"2025-05-31",category:"strength",label:"Strength 21",who:["fish","star"]},
+      {file:"2025-06-01-grit-camp-Camp.jpeg",date:"2025-06-01",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-06-02-grit-strength-52.jpeg",date:"2025-06-02",category:"strength",label:"Strength 52",who:["fish","star"]},
+      {file:"2025-06-03-grit-strength-52.jpeg",date:"2025-06-03",category:"strength",label:"Strength 52",who:["fish","star"]},
+      {file:"2025-06-14-grit-strength-50.jpeg",date:"2025-06-14",category:"strength",label:"Strength 50",who:["fish","star"]},
+      {file:"2025-06-15-grit-camp-Camp.jpeg",date:"2025-06-15",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-06-15-grit-cardio-31.jpeg",date:"2025-06-15",category:"cardio",label:"Cardio 31",who:["fish"]},
+      {file:"2025-06-17-grit-strength-23.jpeg",date:"2025-06-17",category:"strength",label:"Strength 23",who:["fish","star"]},
+      {file:"2025-06-18-grit-strength-48.jpeg",date:"2025-06-18",category:"strength",label:"Strength 48",who:["fish","star"]},
+      {file:"2025-06-19-grit-cardio-49.jpeg",date:"2025-06-19",category:"cardio",label:"Cardio 49",who:["fish","star"]},
+      {file:"2025-06-21-grit-strength-47.jpeg",date:"2025-06-21",category:"strength",label:"Strength 47",who:["fish","star"]},
+      {file:"2025-06-22-grit-camp-Camp.jpeg",date:"2025-06-22",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-06-24-grit-athletic-27.jpeg",date:"2025-06-24",category:"athletic",label:"Plyo 27",who:["fish","star"]},
+      {file:"2025-06-26-grit-cardio-52.jpeg",date:"2025-06-26",category:"cardio",label:"Cardio 52",who:["fish","star"]},
+      {file:"2025-06-29-grit-cardio-34.jpeg",date:"2025-06-29",category:"cardio",label:"Cardio 34",who:["fish","star"]},
+      {file:"2025-06-29-grit-strength-32.jpeg",date:"2025-06-29",category:"strength",label:"Strength 32",who:["fish","star"]},
+      {file:"2025-07-01-grit-strength-43.jpeg",date:"2025-07-01",category:"strength",label:"Strength 43",who:["fish","star"]},
+      {file:"2025-07-02-grit-cardio-29.jpeg",date:"2025-07-02",category:"cardio",label:"Cardio 29",who:["fish","star"]},
+      {file:"2025-07-06-grit-cardio-29.jpeg",date:"2025-07-06",category:"cardio",label:"Cardio 29",who:["fish","star"]},
+      {file:"2025-07-13-grit-cardio-40.jpeg",date:"2025-07-13",category:"cardio",label:"Cardio 40",who:["fish","star"]},
+      {file:"2025-07-14-grit-cardio-49.jpeg",date:"2025-07-14",category:"cardio",label:"Cardio 49",who:["star"]},
+      {file:"2025-07-15-grit-cardio-49.jpeg",date:"2025-07-15",category:"cardio",label:"Cardio 49",who:["fish","star"]},
+      {file:"2025-07-16-grit-cardio-46.jpeg",date:"2025-07-16",category:"cardio",label:"Cardio 46",who:["fish","star"]},
+      {file:"2025-07-17-grit-cardio-32.jpeg",date:"2025-07-17",category:"cardio",label:"Cardio 32",who:["fish","star"]},
+      {file:"2025-07-19-grit-cardio-39.jpeg",date:"2025-07-19",category:"cardio",label:"Cardio 39",who:["fish","star"]},
+      {file:"2025-07-20-grit-camp-Camp.jpeg",date:"2025-07-20",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-07-21-grit-strength-39.jpeg",date:"2025-07-21",category:"strength",label:"Strength 39",who:["star"]},
+      {file:"2025-07-22-grit-cardio-40.jpeg",date:"2025-07-22",category:"cardio",label:"Cardio 40",who:["fish","star"]},
+      {file:"2025-07-23-grit-strength-24.jpeg",date:"2025-07-23",category:"strength",label:"Strength 24",who:["star"]},
+      {file:"2025-07-25-grit-mix-37.jpeg",date:"2025-07-25",category:"mix",label:"Mix 37",who:["fish","star"]},
+      {file:"2025-07-26-grit-strength-35.jpeg",date:"2025-07-26",category:"strength",label:"Strength 35",who:["fish","star"]},
+      {file:"2025-07-27-grit-camp-Camp.jpeg",date:"2025-07-27",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-07-29-grit-cardio-45.jpeg",date:"2025-07-29",category:"cardio",label:"Cardio 45",who:["star"]},
+      {file:"2025-07-31-grit-cardio-24.jpeg",date:"2025-07-31",category:"cardio",label:"Cardio 24",who:["fish","star"]},
+      {file:"2025-08-01-grit-cardio-50.jpeg",date:"2025-08-01",category:"cardio",label:"Cardio 50",who:["fish","star"]},
+      {file:"2025-08-01-grit-mix-38.jpeg",date:"2025-08-01",category:"mix",label:"Mix 38",who:["star"]},
+      {file:"2025-08-03-grit-camp-Camp.jpeg",date:"2025-08-03",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-08-03-grit-cardio-36.jpeg",date:"2025-08-03",category:"cardio",label:"Cardio 36",who:["fish","star"]},
+      {file:"2025-08-05-grit-cardio-29.jpeg",date:"2025-08-05",category:"cardio",label:"Cardio 29",who:["fish","star"]},
+      {file:"2025-08-07-grit-cardio-31.jpeg",date:"2025-08-07",category:"cardio",label:"Cardio 31",who:["fish","star"]},
+      {file:"2025-08-08-grit-cardio-39.jpeg",date:"2025-08-08",category:"cardio",label:"Cardio 39",who:["fish","star"]},
+      {file:"2025-08-14-grit-cardio-30.jpeg",date:"2025-08-14",category:"cardio",label:"Cardio 30",who:["fish","star"]},
+      {file:"2025-08-17-grit-cardio-28.jpeg",date:"2025-08-17",category:"cardio",label:"Cardio 28",who:["fish","star"]},
+      {file:"2025-08-21-grit-cardio-49.jpeg",date:"2025-08-21",category:"cardio",label:"Cardio 49",who:["fish","star"]},
+      {file:"2025-08-24-grit-camp-Camp.jpeg",date:"2025-08-24",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-08-27-grit-strength-50.jpeg",date:"2025-08-27",category:"strength",label:"Strength 50",who:["star"]},
+      {file:"2025-08-31-grit-camp-Camp.jpeg",date:"2025-08-31",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-08-31-grit-cardio-53.jpeg",date:"2025-08-31",category:"cardio",label:"Cardio 53",who:["fish","star"]},
+      {file:"2025-09-04-grit-cardio-53.jpeg",date:"2025-09-04",category:"cardio",label:"Cardio 53",who:["fish"]},
+      {file:"2025-09-05-grit-cardio-53.jpeg",date:"2025-09-05",category:"cardio",label:"Cardio 53",who:["fish"]},
+      {file:"2025-09-06-grit-strength-39.jpeg",date:"2025-09-06",category:"strength",label:"Strength 39",who:["fish"]},
+      {file:"2025-09-07-grit-camp-Camp.jpeg",date:"2025-09-07",category:"camp",label:"Camp",who:["fish"]},
+      {file:"2025-09-08-grit-cardio-53.jpeg",date:"2025-09-08",category:"cardio",label:"Cardio 53",who:["star"]},
+      {file:"2025-09-10-grit-strength-41.jpeg",date:"2025-09-10",category:"strength",label:"Strength 41",who:["star"]},
+      {file:"2025-09-11-grit-cardio-31.jpeg",date:"2025-09-11",category:"cardio",label:"Cardio 31",who:["fish","star"]},
+      {file:"2025-09-12-grit-cardio-53.jpeg",date:"2025-09-12",category:"cardio",label:"Cardio 53",who:["fish","star"]},
+      {file:"2025-09-14-grit-camp-Camp.jpeg",date:"2025-09-14",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-09-17-grit-cardio-43.jpeg",date:"2025-09-17",category:"cardio",label:"Cardio 43",who:["star"]},
+      {file:"2025-09-18-grit-cardio-50.jpeg",date:"2025-09-18",category:"cardio",label:"Cardio 50",who:["fish","star"]},
+      {file:"2025-09-21-grit-camp-Camp.jpeg",date:"2025-09-21",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-09-22-grit-cardio-43.jpeg",date:"2025-09-22",category:"cardio",label:"Cardio 43",who:["star"]},
+      {file:"2025-10-12-grit-cardio-31.jpeg",date:"2025-10-12",category:"cardio",label:"Cardio 31",who:["fish","star"]},
+      {file:"2025-10-16-grit-cardio-45.jpeg",date:"2025-10-16",category:"cardio",label:"Cardio 45",who:["fish","star"]},
+      {file:"2025-10-18-grit-strength-48.jpeg",date:"2025-10-18",category:"strength",label:"Strength 48",who:["fish","star"]},
+      {file:"2025-10-19-grit-camp-Camp.jpeg",date:"2025-10-19",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-10-22-grit-strength-21.jpeg",date:"2025-10-22",category:"strength",label:"Strength 21",who:["star"]},
+      {file:"2025-10-26-grit-strength-38.jpeg",date:"2025-10-26",category:"strength",label:"Strength 38",who:["fish","star"]},
+      {file:"2025-10-29-grit-strength-51.jpeg",date:"2025-10-29",category:"strength",label:"Strength 51",who:["fish","star"]},
+      {file:"2025-10-30-grit-cardio-40.jpeg",date:"2025-10-30",category:"cardio",label:"Cardio 40",who:["fish","star"]},
+      {file:"2025-11-02-grit-camp-Camp.jpeg",date:"2025-11-02",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-11-09-grit-camp-Camp.jpeg",date:"2025-11-09",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-11-10-grit-strength-34.jpeg",date:"2025-11-10",category:"strength",label:"Strength 34",who:["fish","star"]},
+      {file:"2025-11-15-grit-strength-52.jpeg",date:"2025-11-15",category:"strength",label:"Strength 52",who:["fish"]},
+      {file:"2025-11-16-grit-camp-Camp.jpeg",date:"2025-11-16",category:"camp",label:"Camp",who:["fish","star"]},
+      {file:"2025-11-18-grit-cardio-54.jpeg",date:"2025-11-18",category:"cardio",label:"Cardio 54",who:["star"]},
+      {file:"2025-11-19-grit-strength-54.jpeg",date:"2025-11-19",category:"strength",label:"Strength 54",who:["fish","star"]},
+      {file:"2025-11-23-grit-cardio-50.jpeg",date:"2025-11-23",category:"cardio",label:"Cardio 50",who:["fish"]},
+      {file:"2025-11-26-grit-cardio-HIIT.jpeg",date:"2025-11-26",category:"cardio",label:"Cardio HIIT",who:["star"]},
+      {file:"2025-12-03-grit-strength-54.jpeg",date:"2025-12-03",category:"strength",label:"Strength 54",who:["star"]},
+      {file:"2025-12-21-grit-cardio-30.jpeg",date:"2025-12-21",category:"cardio",label:"Cardio 30",who:["fish","star"]},
+      {file:"2026-01-11-grit-cardio-39.jpg",date:"2026-01-11",category:"cardio",label:"Cardio 39",who:["fish"]},
+      {file:"2026-01-18-grit-cardio-45.JPG",date:"2026-01-18",category:"cardio",label:"Cardio 45",who:["fish","star"]},
+      {file:"2026-01-25-grit-cardio-30.JPG",date:"2026-01-25",category:"cardio",label:"Cardio 30",who:["fish","star"]},
+      {file:"2026-01-29-grit-cardio-29.jpg",date:"2026-01-29",category:"cardio",label:"Cardio 29",who:["fish","star"]},
+      {file:"2026-02-08-grit-cardio-39.jpg",date:"2026-02-08",category:"cardio",label:"Cardio 39",who:["fish","star"]},
+      {file:"2026-02-11-grit-cardio-42.jpg",date:"2026-02-11",category:"cardio",label:"Cardio 42",who:["fish","star"]},
+      {file:"2026-02-12-grit-cardio-42.JPG",date:"2026-02-12",category:"cardio",label:"Cardio 42",who:["fish","star"]},
+      {file:"2026-02-14-grit-plyo-26.JPG",date:"2026-02-14",category:"athletic",label:"Plyo 26",who:["fish","star"]},
+      {file:"2026-02-15-grit-cardio-40.JPG",date:"2026-02-15",category:"cardio",label:"Cardio 40",who:["fish","star"]},
+      {file:"2026-02-16-grit-cardio.JPG",date:"2026-02-16",category:"cardio",label:"Cardio",who:["star"]},
+      {file:"2026-02-19-grit-cardio-42.JPG",date:"2026-02-19",category:"cardio",label:"Cardio 42",who:["star"]},
+      {file:"2026-02-21-grit-cardio-42.JPG",date:"2026-02-21",category:"cardio",label:"Cardio 42",who:["fish","star"]},
+      {file:"2026-02-22-grit-cardio-34.JPG",date:"2026-02-22",category:"cardio",label:"Cardio 34",who:["fish","star"]},
+      {file:"2026-02-28-grit-cardio-41.jpg",date:"2026-02-28",category:"cardio",label:"Cardio 41",who:["fish","star"]},
+      {file:"2026-03-01-grit-cardio-37.JPG",date:"2026-03-01",category:"cardio",label:"Cardio 37",who:["fish","star"]},
+      {file:"2026-03-08-grit-cardio-55.JPG",date:"2026-03-08",category:"cardio",label:"Cardio 55",who:["fish","star"]},
+      {file:"2026-03-14-grit-athletic-36.JPG",date:"2026-03-14",category:"athletic",label:"Athletic 36",who:["fish","star"]}
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const stats = document.getElementById("stats");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+
+    let catFilter = "all";
+    let whoFilter = "all";
+    let sortDesc = true;
+
+    function render() {
+      let items = photos;
+
+      // Category filter
+      if (catFilter !== "all") {
+        items = items.filter(p => p.category === catFilter);
+      }
+
+      // Who filter
+      if (whoFilter === "fish") {
+        items = items.filter(p => p.who.includes("fish"));
+      } else if (whoFilter === "star") {
+        items = items.filter(p => p.who.includes("star"));
+      } else if (whoFilter === "both") {
+        items = items.filter(p => p.who.includes("fish") && p.who.includes("star"));
+      }
+
+      // Sort by date
+      items = [...items].sort((a, b) => {
+        return sortDesc
+          ? b.date.localeCompare(a.date)
+          : a.date.localeCompare(b.date);
+      });
+
+      stats.innerHTML = `<span>${items.length}</span> photos`;
+
+      if (items.length === 0) {
+        gallery.innerHTML = '<div class="empty">No photos found</div>';
+        return;
+      }
+
+      gallery.innerHTML = items.map(p => `
+        <div class="card" data-category="${p.category}">
+          <div class="img-wrap" onclick="openLightbox('fitness/photos/${p.file}')">
+            <img src="fitness/photos/${p.file}" alt="${p.label}" loading="lazy">
+          </div>
+          <div class="info">
+            <span class="date">${p.date}</span>
+            <span class="title">${p.label}</span>
+            <span class="tags">
+              ${p.who.includes("star") ? '<span class="who-tag">🌟</span>' : ''}
+              ${p.who.includes("fish") ? '<span class="who-tag">🐟</span>' : ''}
+              <span class="tag ${p.category}">${p.category === 'athletic' ? 'Athletic/Plyo' : p.category.charAt(0).toUpperCase() + p.category.slice(1)}</span>
+            </span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // Category filter buttons
+    document.querySelectorAll("#category-filters button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelector("#category-filters .active").classList.remove("active");
+        btn.classList.add("active");
+        catFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    // Who filter buttons
+    document.querySelectorAll("#who-filters button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelector("#who-filters .active").classList.remove("active");
+        btn.classList.add("active");
+        whoFilter = btn.dataset.who;
+        render();
+      });
+    });
+
+    // Sort button
+    document.getElementById("sort-btn").addEventListener("click", () => {
+      sortDesc = !sortDesc;
+      document.getElementById("sort-arrow").textContent = sortDesc ? "▼" : "▲";
+      render();
+    });
+
+    // Lightbox
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add("open");
+    }
+    lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
+
+    render();
+  </script>
+</body>
+</html>
