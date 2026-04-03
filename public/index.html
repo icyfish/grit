@@ -745,10 +745,10 @@
         return;
       }
 
-      gallery.innerHTML = items.map(p => `
+      gallery.innerHTML = items.map((p, i) => `
         <div class="card" data-category="${p.category}">
           <div class="img-wrap" onclick="openLightbox('fitness/photos/${p.file}')">
-            <img src="fitness/photos/${p.file}" alt="${p.label}" loading="lazy">
+            <img src="fitness/photos/${p.file}" alt="${p.label}" loading="${i < 12 ? 'eager' : 'lazy'}">
           </div>
           <div class="info">
             <span class="date">${p.date}</span>
