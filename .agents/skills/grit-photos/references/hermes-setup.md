@@ -22,8 +22,17 @@ Hermes 的技能目录和项目技能发现规则以 [官方技能文档](https:
 
 - 在网关进程可见的环境中设置 `GRIT_REPO_DIR` 为服务器上的 Grit checkout 绝对路径，或在首次调用时明确提供路径。它是本 skill 的路径约定，不是 Hermes 自带配置项。
 - 确认远程是 `git@github.com:icyfish/grit.git` 或其 HTTPS 等价地址，且运行网关的身份具备拉取和推送权限。SSH 私钥留在服务器既有凭据配置中。
-- 准备 Git、Node.js 20、npm、图片解码/压缩工具。ImageMagick 必须具备所需输入格式的解码能力；可用 `magick -list format` 检查。无需原图归档目录。
+- 准备 Git、Node.js（20.x 或更新的 LTS 均可，版本不是硬性要求）、npm、图片解码/压缩工具。ImageMagick 必须具备所需输入格式的解码能力；可用 `magick -list format` 检查。若服务器是 ImageMagick 6（只有 `convert`/`identify`，没有 `magick`），用 `convert` 代替或为其提供 `magick` 兼容壳。无需原图归档目录。
 - 飞书附件下载与终端处理必须共享可访问的文件系统；如果终端跑在容器或远程后端，需要确认附件路径映射。
+
+## 国内云主机上的已知坑
+
+- **GitHub 单连接约 40KB/s。** 全量 clone（本仓库约 200MB）要一小时以上。可用 `git clone --depth 1 --filter=blob:none` 先拿提交和树，再用 `git cat-file --batch` 分 N 组并行（每组一条 SSH 连接）把缺的 blob 拉进对象库，实测 6 路约 260KB/s。只读网页/raw 域名可能先快后被限速。
+- **`npm` 走国内镜像**（`npm config get registry` 确认），`npm ci` + `next build` 约 1 分钟。
+- **`next/font/google` 偶发构建失败**：报 `TypeError: Cannot read properties of null (reading '1')` 并提示 webpack 失败。这是构建时抓 Google 字体抖动，与照片改动无关。重跑 `npm run build` 即可；不要在发布前 `rm -rf .next`，否则每次都会重新抓字体。
+- **验证部署**：`GET /repos/icyfish/grit/actions/runs?per_page=3` 看该 commit 的 `conclusion`，再直接访问 `https://icyfish.github.io/grit/` 与新增图片路径确认 200 与字节数，才算真正上线。
+- **auth-less GitHub API 可用**：读仓库、列 runs、取 tree 都不需要 token，只有 Pages 详情接口要权限。
+
 
 ## 飞书调用
 
